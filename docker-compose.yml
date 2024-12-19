@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: estudos
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: .
+      target: final
+    container_name: api
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: 123
+      DB_NAME: estudos
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
